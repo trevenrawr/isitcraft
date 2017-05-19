@@ -1,0 +1,12 @@
+.title-link {
+	color: inherit;
+	text-decoration: none;
+}
+
+.title-link:hover {
+	text-decoration: underline;
+}
+
+.brewery-link {
+	color: inherit;
+}

@@ -9,6 +9,8 @@ import Json.Decode as Json
 import Json.Encode as JE
 import Dom
 import Task
+--import Signal
+--import ElmFire
 
 
 
@@ -28,16 +30,23 @@ subscriptions model =
 -- MODEL
 type alias Brewery =
   { title: String
-  , independent : Bool
+  , craft : Bool
   , owner : String
-  , img : String
+  , founded : String
+  , location : String
+  , website : String
   }
 
 breweries : List Brewery
 breweries =
-  [ Brewery "Fu Man Brew" True "Fu Man Brew" "fmb_icon.jpg"
-  , Brewery "Deschutes Brewery" True "Deschutes Brewery" "deschutes_brewing_icon.jpg"
+  [ Brewery "Fu Man Brew" True "Fu Man Brew" "2015" "Boulder, CO" ""
+  , Brewery "Deschutes Brewery" True "Deschutes Brewery" "1988" "Bend, OR" "https://www.deschutesbrewery.com"
+  , Brewery "Anheuser-Busch" False "Anheuser-Busch InBev" "1852" "St. Louis, MO" "http://www.anheuser-busch.com"
   ]
+
+defaultBrewery : Brewery
+defaultBrewery =
+  (Brewery "" True "" "" "" "")
 
 
 type alias Model =
@@ -191,7 +200,7 @@ removeSelection model =
 getBreweryAtId breweries id =
   List.filter (\brewery -> brewery.title == id) breweries
     |> List.head
-    |> Maybe.withDefault (Brewery "" True "" "")
+    |> Maybe.withDefault defaultBrewery
 
 setQuery model id =
   { model
@@ -298,31 +307,63 @@ view model =
 
   in
     div []
-      (List.append
-        [ input
-          (activeDescendant
-            [ onInput SetQuery
-            , onFocus OnFocus
-            , onWithOptions "keydown" options dec
-            , value query
-            , id "brewery-input"
-            , class "autocomplete-input u-full-width"
-            , autocomplete False
-            , attribute "aria-owns" "list-of-breweries"
-            , attribute "aria-expanded" <| String.toLower <| toString model.showMenu
-            , attribute "aria-haspopup" <| String.toLower <| toString model.showMenu
-            , attribute "role" "combobox"
-            , attribute "aria-autocomplete" "list"
-            ]
-          )
-          []
-        ]
-        menu
-      )
+      [ div [ class "six columns" ]
+        (List.append
+          [ input
+            (activeDescendant
+              [ onInput SetQuery
+              , onFocus OnFocus
+              , onWithOptions "keydown" options dec
+              , value query
+              , attribute "type" "text"
+              , placeholder "brewery search"
+              , id "brewery-input"
+              , class "autocomplete-input u-full-width"
+              , autocomplete False
+              , attribute "aria-owns" "list-of-breweries"
+              , attribute "aria-expanded" <| String.toLower <| toString model.showMenu
+              , attribute "aria-haspopup" <| String.toLower <| toString model.showMenu
+              , attribute "role" "combobox"
+              , attribute "aria-autocomplete" "list"
+              ]
+            )
+            []
+          ]
+          menu
+        )
+      , div [ class "six columns" ]
+          [ breweryInfo model ]
+      ]
+
+breweryInfo : Model -> Html Msg
+breweryInfo model =
+  case model.selectedBrewery of
+    Just brewery ->
+      let
+        color =
+          if brewery.craft then
+            "craft"
+          else
+            "not-craft"
+
+        yesno =
+          if brewery.craft then
+            String.concat [ brewery.title, " is craft!" ]
+          else
+            String.concat [ brewery.title, " is not craft." ]
+      in
+        div [ id "brewery-info" ]
+          [ h4 [ class color ] [ Html.text yesno ]
+          , Html.p [] [ Html.text (String.concat [ "Owned by: ", brewery.owner ]) ]
+          ]
+
+    Nothing ->
+      Html.text ""
+
 
 viewMenu : Model -> Html Msg
 viewMenu model =
-  div [ class "autocomplete-menu" ]
+  div [ class "autocomplete-menu u-full-width" ]
     [ Html.map SetAutoState (Autocomplete.view viewConfig model.howManyToShow model.autoState (acceptableBreweries model.query model.breweries)) ]
 
 

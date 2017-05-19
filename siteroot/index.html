@@ -5,7 +5,7 @@
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>Your page title here :)</title>
+  <title>is it craft?</title>
   <meta name="description" content="">
   <meta name="author" content="Fu Man Brew">
 
@@ -15,16 +15,18 @@
 
   <!-- FONT
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css"> <!-- -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500" rel="stylesheet">
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="css/normalize7.css"> <!-- -->
+  <link rel="stylesheet" href="css/normalize7.css">
   <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/autocomplete.css">
+  <link rel="stylesheet" href="css/main.css">
 
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link href="data:image/x-icon;base64,AAABAAEAEBAQAAAAAAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAlmhAJ/FzwAAjP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAzMzAAAAAAAzMzMwAAAAADEzEzAAAAAAMTMTMwAAAAAxMxMzAAAAADEzEzAwAAAAMTMTMDAAAAAyMxMwMAAAADIzEzAwAAAAMjMjMzAAAAAyMiMzAAAAACIiIiAAAAAAAAIgAAAAAAAAAAAAAAD//wAA//8AAPg/AADwHwAA8B8AAPAPAADwDwAA8BcAAPAXAADwFwAA8BcAAPAHAADwDwAA8B8AAP5/AAD//wAA" rel="icon" type="image/x-icon" />
 
 </head>
 <body>
@@ -33,14 +35,17 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
     <div class="row">
-      <div class="eight columns" style="margin-top: 25%">
-        <div id="main"></div>
-        <script src="js/main.js"></script>
-        <script>
-          var node = document.getElementById('main');
-          var app = Elm.Main.embed(node);
-        </script>
+      <div class="six columns" style="margin-top: 20%">
+        <h1>is it <a class="title-link" href="https://www.brewersassociation.org/statistics/craft-brewer-defined/">craft</a>?</h1>
       </div>
+    </div>
+    <div class="row">
+      <div id="main"></div>
+      <script src="js/main.js"></script>
+      <script>
+        var node = document.getElementById('main');
+        var app = Elm.Main.embed(node);
+      </script>
     </div>
   </div>
 

@@ -9757,19 +9757,91 @@ var _user$project$Main$viewConfig = function () {
 			li: customizedLi
 		});
 }();
+var _user$project$Main$breweryInfo = function (model) {
+	var _p0 = model.selectedBrewery;
+	if (_p0.ctor === 'Just') {
+		var _p1 = _p0._0;
+		var yesno = _p1.craft ? _elm_lang$core$String$concat(
+			{
+				ctor: '::',
+				_0: _p1.title,
+				_1: {
+					ctor: '::',
+					_0: ' is craft!',
+					_1: {ctor: '[]'}
+				}
+			}) : _elm_lang$core$String$concat(
+			{
+				ctor: '::',
+				_0: _p1.title,
+				_1: {
+					ctor: '::',
+					_0: ' is not craft.',
+					_1: {ctor: '[]'}
+				}
+			});
+		var color = _p1.craft ? 'craft' : 'not-craft';
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$id('brewery-info'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h4,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class(color),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(yesno),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								_elm_lang$core$String$concat(
+									{
+										ctor: '::',
+										_0: 'Owned by: ',
+										_1: {
+											ctor: '::',
+											_0: _p1.owner,
+											_1: {ctor: '[]'}
+										}
+									})),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	} else {
+		return _elm_lang$html$Html$text('');
+	}
+};
 var _user$project$Main$acceptableBreweries = F2(
 	function (query, brewery) {
 		var lowerQuery = _elm_lang$core$String$toLower(query);
 		return A2(
 			_elm_lang$core$List$filter,
-			function (_p0) {
+			function (_p2) {
 				return A2(
 					_elm_lang$core$String$contains,
 					lowerQuery,
 					_elm_lang$core$String$toLower(
 						function (_) {
 							return _.title;
-						}(_p0)));
+						}(_p2)));
 			},
 			brewery);
 	});
@@ -9790,25 +9862,30 @@ var _user$project$Main$resetInput = function (model) {
 				model,
 				{query: ''})));
 };
-var _user$project$Main$Brewery = F4(
-	function (a, b, c, d) {
-		return {title: a, independent: b, owner: c, img: d};
+var _user$project$Main$Brewery = F6(
+	function (a, b, c, d, e, f) {
+		return {title: a, craft: b, owner: c, founded: d, location: e, website: f};
 	});
 var _user$project$Main$breweries = {
 	ctor: '::',
-	_0: A4(_user$project$Main$Brewery, 'Fu Man Brew', true, 'Fu Man Brew', 'fmb_icon.jpg'),
+	_0: A6(_user$project$Main$Brewery, 'Fu Man Brew', true, 'Fu Man Brew', '2015', 'Boulder, CO', ''),
 	_1: {
 		ctor: '::',
-		_0: A4(_user$project$Main$Brewery, 'Deschutes Brewery', true, 'Deschutes Brewery', 'deschutes_brewing_icon.jpg'),
-		_1: {ctor: '[]'}
+		_0: A6(_user$project$Main$Brewery, 'Deschutes Brewery', true, 'Deschutes Brewery', '1988', 'Bend, OR', 'https://www.deschutesbrewery.com'),
+		_1: {
+			ctor: '::',
+			_0: A6(_user$project$Main$Brewery, 'Anheuser-Busch', false, 'Anheuser-Busch InBev', '1852', 'St. Louis, MO', 'http://www.anheuser-busch.com'),
+			_1: {ctor: '[]'}
+		}
 	}
 };
 var _user$project$Main$init = {breweries: _user$project$Main$breweries, autoState: _thebritican$elm_autocomplete$Autocomplete$empty, howManyToShow: 5, query: '', selectedBrewery: _elm_lang$core$Maybe$Nothing, showMenu: false};
+var _user$project$Main$defaultBrewery = A6(_user$project$Main$Brewery, '', true, '', '', '', '');
 var _user$project$Main$getBreweryAtId = F2(
 	function (breweries, id) {
 		return A2(
 			_elm_lang$core$Maybe$withDefault,
-			A4(_user$project$Main$Brewery, '', true, '', ''),
+			_user$project$Main$defaultBrewery,
 			_elm_lang$core$List$head(
 				A2(
 					_elm_lang$core$List$filter,
@@ -9867,7 +9944,7 @@ var _user$project$Main$updateConfig = _thebritican$elm_autocomplete$Autocomplete
 			return _elm_lang$core$Maybe$Just(
 				_user$project$Main$PreviewBrewery(id));
 		},
-		onMouseLeave: function (_p1) {
+		onMouseLeave: function (_p3) {
 			return _elm_lang$core$Maybe$Nothing;
 		},
 		onMouseClick: function (id) {
@@ -9880,44 +9957,44 @@ var _user$project$Main$update = F2(
 	function (msg, model) {
 		update:
 		while (true) {
-			var _p2 = msg;
-			switch (_p2.ctor) {
+			var _p4 = msg;
+			switch (_p4.ctor) {
 				case 'SetQuery':
-					var _p4 = _p2._0;
-					var showMenu = function (_p3) {
-						return !_elm_lang$core$List$isEmpty(_p3);
+					var _p6 = _p4._0;
+					var showMenu = function (_p5) {
+						return !_elm_lang$core$List$isEmpty(_p5);
 					}(
-						A2(_user$project$Main$acceptableBreweries, _p4, model.breweries));
+						A2(_user$project$Main$acceptableBreweries, _p6, model.breweries));
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{query: _p4, showMenu: showMenu, selectedBrewery: _elm_lang$core$Maybe$Nothing}),
+							{query: _p6, showMenu: showMenu, selectedBrewery: _elm_lang$core$Maybe$Nothing}),
 						{ctor: '[]'});
 				case 'SetAutoState':
-					var _p5 = A5(
+					var _p7 = A5(
 						_thebritican$elm_autocomplete$Autocomplete$update,
 						_user$project$Main$updateConfig,
-						_p2._0,
+						_p4._0,
 						model.howManyToShow,
 						model.autoState,
 						A2(_user$project$Main$acceptableBreweries, model.query, model.breweries));
-					var newState = _p5._0;
-					var maybeMsg = _p5._1;
+					var newState = _p7._0;
+					var maybeMsg = _p7._1;
 					var newModel = _elm_lang$core$Native_Utils.update(
 						model,
 						{autoState: newState});
-					var _p6 = maybeMsg;
-					if (_p6.ctor === 'Nothing') {
+					var _p8 = maybeMsg;
+					if (_p8.ctor === 'Nothing') {
 						return A2(
 							_elm_lang$core$Platform_Cmd_ops['!'],
 							newModel,
 							{ctor: '[]'});
 					} else {
-						var _v2 = _p6._0,
-							_v3 = newModel;
-						msg = _v2;
-						model = _v3;
+						var _v3 = _p8._0,
+							_v4 = newModel;
+						msg = _v3;
+						model = _v4;
 						continue update;
 					}
 				case 'HandleEscape':
@@ -9930,9 +10007,9 @@ var _user$project$Main$update = F2(
 								model,
 								{query: ''})));
 					var escapedModel = function () {
-						var _p7 = model.selectedBrewery;
-						if (_p7.ctor === 'Just') {
-							return _elm_lang$core$Native_Utils.eq(model.query, _p7._0.title) ? _user$project$Main$resetInput(model) : handleEscape;
+						var _p9 = model.selectedBrewery;
+						if (_p9.ctor === 'Just') {
+							return _elm_lang$core$Native_Utils.eq(model.query, _p9._0.title) ? _user$project$Main$resetInput(model) : handleEscape;
 						} else {
 							return handleEscape;
 						}
@@ -9942,15 +10019,15 @@ var _user$project$Main$update = F2(
 						escapedModel,
 						{ctor: '[]'});
 				case 'Wrap':
-					var _p8 = model.selectedBrewery;
-					if (_p8.ctor === 'Just') {
-						var _v6 = _user$project$Main$Reset,
-							_v7 = model;
-						msg = _v6;
-						model = _v7;
+					var _p10 = model.selectedBrewery;
+					if (_p10.ctor === 'Just') {
+						var _v7 = _user$project$Main$Reset,
+							_v8 = model;
+						msg = _v7;
+						model = _v8;
 						continue update;
 					} else {
-						return _p2._0 ? A2(
+						return _p4._0 ? A2(
 							_elm_lang$core$Platform_Cmd_ops['!'],
 							_elm_lang$core$Native_Utils.update(
 								model,
@@ -9999,20 +10076,20 @@ var _user$project$Main$update = F2(
 						{ctor: '[]'});
 				case 'SelectBreweryKeyboard':
 					var newModel = _user$project$Main$resetMenu(
-						A2(_user$project$Main$setQuery, model, _p2._0));
+						A2(_user$project$Main$setQuery, model, _p4._0));
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						newModel,
 						{ctor: '[]'});
 				case 'SelectBreweryMouse':
 					var newModel = _user$project$Main$resetMenu(
-						A2(_user$project$Main$setQuery, model, _p2._0));
+						A2(_user$project$Main$setQuery, model, _p4._0));
 					return {
 						ctor: '_Tuple2',
 						_0: newModel,
 						_1: A2(
 							_elm_lang$core$Task$attempt,
-							function (_p9) {
+							function (_p11) {
 								return _user$project$Main$NoOp;
 							},
 							_elm_lang$dom$Dom$focus('brewery-input'))
@@ -10024,7 +10101,7 @@ var _user$project$Main$update = F2(
 							model,
 							{
 								selectedBrewery: _elm_lang$core$Maybe$Just(
-									A2(_user$project$Main$getBreweryAtId, model.breweries, _p2._0))
+									A2(_user$project$Main$getBreweryAtId, model.breweries, _p4._0))
 							}),
 						{ctor: '[]'});
 				case 'OnFocus':
@@ -10051,7 +10128,7 @@ var _user$project$Main$viewMenu = function (model) {
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('autocomplete-menu'),
+			_0: _elm_lang$html$Html_Attributes$class('autocomplete-menu u-full-width'),
 			_1: {ctor: '[]'}
 		},
 		{
@@ -10073,11 +10150,11 @@ var _user$project$Main$SetQuery = function (a) {
 };
 var _user$project$Main$view = function (model) {
 	var activeDescendant = function (attributes) {
-		var _p10 = model.selectedBrewery;
-		if (_p10.ctor === 'Just') {
+		var _p12 = model.selectedBrewery;
+		if (_p12.ctor === 'Just') {
 			return {
 				ctor: '::',
-				_0: A2(_elm_lang$html$Html_Attributes$attribute, 'aria-activedescendant', _p10._0.title),
+				_0: A2(_elm_lang$html$Html_Attributes$attribute, 'aria-activedescendant', _p12._0.title),
 				_1: attributes
 			};
 		} else {
@@ -10085,9 +10162,9 @@ var _user$project$Main$view = function (model) {
 		}
 	};
 	var query = function () {
-		var _p11 = model.selectedBrewery;
-		if (_p11.ctor === 'Just') {
-			return _p11._0.title;
+		var _p13 = model.selectedBrewery;
+		if (_p13.ctor === 'Just') {
+			return _p13._0.title;
 		} else {
 			return model.query;
 		}
@@ -10098,11 +10175,11 @@ var _user$project$Main$view = function (model) {
 		_1: {ctor: '[]'}
 	} : {ctor: '[]'};
 	var fromResult = function (result) {
-		var _p12 = result;
-		if (_p12.ctor === 'Ok') {
-			return _elm_lang$core$Json_Decode$succeed(_p12._0);
+		var _p14 = result;
+		if (_p14.ctor === 'Ok') {
+			return _elm_lang$core$Json_Decode$succeed(_p14._0);
 		} else {
-			return _elm_lang$core$Json_Decode$fail(_p12._0);
+			return _elm_lang$core$Json_Decode$fail(_p14._0);
 		}
 	};
 	var dec = A2(
@@ -10118,58 +10195,77 @@ var _user$project$Main$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
-		A2(
-			_elm_lang$core$List$append,
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$input,
-					activeDescendant(
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onInput(_user$project$Main$SetQuery),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onFocus(_user$project$Main$OnFocus),
-								_1: {
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('six columns'),
+					_1: {ctor: '[]'}
+				},
+				A2(
+					_elm_lang$core$List$append,
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$input,
+							activeDescendant(
+								{
 									ctor: '::',
-									_0: A3(_elm_lang$html$Html_Events$onWithOptions, 'keydown', options, dec),
+									_0: _elm_lang$html$Html_Events$onInput(_user$project$Main$SetQuery),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$value(query),
+										_0: _elm_lang$html$Html_Events$onFocus(_user$project$Main$OnFocus),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$id('brewery-input'),
+											_0: A3(_elm_lang$html$Html_Events$onWithOptions, 'keydown', options, dec),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('autocomplete-input u-full-width'),
+												_0: _elm_lang$html$Html_Attributes$value(query),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$autocomplete(false),
+													_0: A2(_elm_lang$html$Html_Attributes$attribute, 'type', 'text'),
 													_1: {
 														ctor: '::',
-														_0: A2(_elm_lang$html$Html_Attributes$attribute, 'aria-owns', 'list-of-breweries'),
+														_0: _elm_lang$html$Html_Attributes$placeholder('brewery search'),
 														_1: {
 															ctor: '::',
-															_0: A2(
-																_elm_lang$html$Html_Attributes$attribute,
-																'aria-expanded',
-																_elm_lang$core$String$toLower(
-																	_elm_lang$core$Basics$toString(model.showMenu))),
+															_0: _elm_lang$html$Html_Attributes$id('brewery-input'),
 															_1: {
 																ctor: '::',
-																_0: A2(
-																	_elm_lang$html$Html_Attributes$attribute,
-																	'aria-haspopup',
-																	_elm_lang$core$String$toLower(
-																		_elm_lang$core$Basics$toString(model.showMenu))),
+																_0: _elm_lang$html$Html_Attributes$class('autocomplete-input u-full-width'),
 																_1: {
 																	ctor: '::',
-																	_0: A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'combobox'),
+																	_0: _elm_lang$html$Html_Attributes$autocomplete(false),
 																	_1: {
 																		ctor: '::',
-																		_0: A2(_elm_lang$html$Html_Attributes$attribute, 'aria-autocomplete', 'list'),
-																		_1: {ctor: '[]'}
+																		_0: A2(_elm_lang$html$Html_Attributes$attribute, 'aria-owns', 'list-of-breweries'),
+																		_1: {
+																			ctor: '::',
+																			_0: A2(
+																				_elm_lang$html$Html_Attributes$attribute,
+																				'aria-expanded',
+																				_elm_lang$core$String$toLower(
+																					_elm_lang$core$Basics$toString(model.showMenu))),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(
+																					_elm_lang$html$Html_Attributes$attribute,
+																					'aria-haspopup',
+																					_elm_lang$core$String$toLower(
+																						_elm_lang$core$Basics$toString(model.showMenu))),
+																				_1: {
+																					ctor: '::',
+																					_0: A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'combobox'),
+																					_1: {
+																						ctor: '::',
+																						_0: A2(_elm_lang$html$Html_Attributes$attribute, 'aria-autocomplete', 'list'),
+																						_1: {ctor: '[]'}
+																					}
+																				}
+																			}
+																		}
 																	}
 																}
 															}
@@ -10179,13 +10275,28 @@ var _user$project$Main$view = function (model) {
 											}
 										}
 									}
-								}
-							}
-						}),
-					{ctor: '[]'}),
+								}),
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					},
+					menu)),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('six columns'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _user$project$Main$breweryInfo(model),
+						_1: {ctor: '[]'}
+					}),
 				_1: {ctor: '[]'}
-			},
-			menu));
+			}
+		});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{

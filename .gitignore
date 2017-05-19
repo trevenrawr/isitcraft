@@ -1,1 +1,5 @@
 source/elm-stuff
+*.txt
+*.json
+.firebaserc
+siteroot/functions
